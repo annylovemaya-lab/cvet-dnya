@@ -11,8 +11,8 @@
 <link rel="manifest" href="manifest.webmanifest">
 <link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
 <link rel="icon" href="icons/icon-192.png">
-<link rel="stylesheet" href="style.css?v=1.1">
-<title>Цвет дня · ver. 1.1</title>
+<link rel="stylesheet" href="style.css?v=1.2">
+<title>Цвет дня · ver. 1.2</title>
 </head>
 <body>
 <div id="app">
@@ -25,7 +25,6 @@
       <button class="icon-btn" id="year-next" aria-label="Следующий год">›</button>
       <button class="icon-btn gear" id="open-settings" aria-label="Настройки">⚙︎</button>
     </header>
-    <div class="seg" id="seg-year" role="tablist"></div>
     <div id="year-grid" class="year-grid"></div>
     <div id="legend-year" class="legend"></div>
     <div id="nudge" class="nudge hidden"></div>
@@ -40,7 +39,7 @@
     </header>
     <div class="month-nav">
       <button class="icon-btn" id="month-prev" aria-label="Предыдущий месяц">‹</button>
-      <div class="seg" id="seg-month" role="tablist"></div>
+      <span class="mn-hint">Нажмите на день, чтобы отметить</span>
       <button class="icon-btn" id="month-next" aria-label="Следующий месяц">›</button>
     </div>
     <div class="weekdays" id="weekdays"></div>
@@ -82,6 +81,6 @@
 
 <div id="toast" class="toast hidden"></div>
 
-<script src="app.js?v=1.1"></script>
+<script src="app.js?v=1.2"></script>
 </body>
 </html>

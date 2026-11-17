@@ -1,10 +1,10 @@
-/* Цвет дня — service worker. ver. 1.1 */
-var CACHE = 'cvet-dnya-ver-1-1';
+/* Цвет дня — service worker. ver. 1.2 */
+var CACHE = 'cvet-dnya-ver-1-2';
 var ASSETS = [
   './',
   'index.html',
-  'style.css?v=1.1',
-  'app.js?v=1.1',
+  'style.css?v=1.2',
+  'app.js?v=1.2',
   'manifest.webmanifest',
   'icons/icon-192.png',
   'icons/icon-512.png',

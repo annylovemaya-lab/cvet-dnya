@@ -1,13 +1,14 @@
-/* Цвет дня — цветовой дневник настроения. ver. 1.1 */
+/* Цвет дня — цветовой дневник настроения. ver. 1.2 */
 (function () {
   'use strict';
 
-  var VERSION = '1.1';
+  var VERSION = '1.2';
   var VAPID_PUBLIC = 'BHMn5qD9fro5z00KWfBW7xqLHterUXmLXmmIBOTNcQULDWhgfl7SC-mBvbxcBzrXOCrXjrLksR3SJ9WqCPUbqug';
   var STORE = 'mt_state_v1';
 
   var MONTHS = ['январь', 'февраль', 'март', 'апрель', 'май', 'июнь', 'июль', 'август', 'сентябрь', 'октябрь', 'ноябрь', 'декабрь'];
   var MONTHS_GEN = ['января', 'февраля', 'марта', 'апреля', 'мая', 'июня', 'июля', 'августа', 'сентября', 'октября', 'ноября', 'декабря'];
+  var MONTHS_SHORT = ['Янв', 'Фев', 'Мар', 'Апр', 'Май', 'Июн', 'Июл', 'Авг', 'Сен', 'Окт', 'Ноя', 'Дек'];
   var WEEKDAYS = ['Пн', 'Вт', 'Ср', 'Чт', 'Пт', 'Сб', 'Вс'];
   var SLOT_NAME = { am: 'Утро', pm: 'Вечер' };
 
@@ -197,7 +198,6 @@
       return '<button data-v="' + it[0] + '" class="' + (it[0] === cur ? 'on' : '') + '">' + it[1] + '</button>';
     }).join('');
   }
-  var VIEW_ITEMS = [['blend', 'Смесь'], ['split', 'Утро · Вечер']];
 
   /* ---------- легенда ---------- */
   function legendHtml() {
@@ -207,22 +207,21 @@
   }
 
   /* ---------- год ---------- */
+  var MON_SHORT = ['янв', 'фев', 'мар', 'апр', 'май', 'июн', 'июл', 'авг', 'сен', 'окт', 'ноя', 'дек'];
   function renderYear() {
     $('year-title').textContent = ui.year;
-    $('seg-year').innerHTML = segHtml(VIEW_ITEMS, S.view);
     var tk = todayKey();
-    var html = '';
-    for (var m = 0; m < 12; m++) {
-      var cells = '';
-      var pads = firstDow(ui.year, m);
-      for (var p = 0; p < pads; p++) cells += '<div class="dot pad"></div>';
-      var n = daysIn(ui.year, m);
-      for (var d = 1; d <= n; d++) {
-        var dk = key(ui.year, m, d);
+    var html = '<div class="yhead"></div>';
+    for (var m = 0; m < 12; m++) html += '<button class="yhead ym" data-m="' + m + '">' + MON_SHORT[m] + '</button>';
+    for (var d = 1; d <= 31; d++) {
+      html += '<div class="ylab">' + d + '</div>';
+      for (var mm = 0; mm < 12; mm++) {
+        if (d > daysIn(ui.year, mm)) { html += '<div class="yc none"></div>'; continue; }
+        var dk = key(ui.year, mm, d);
         var bg = dayBackground(dk);
-        cells += '<div class="dot' + (dk === tk ? ' today' : '') + '"' + (bg ? ' style="background:' + bg + '"' : '') + '></div>';
+        var cls = 'yc' + (bg ? '' : ' empty') + (dk === tk ? ' today' : '') + (dk > tk ? ' future' : '');
+        html += '<button class="' + cls + '" data-d="' + dk + '"' + (bg ? ' style="background:' + bg + '"' : '') + '></button>';
       }
-      html += '<button class="mcard" data-m="' + m + '"><div class="mname">' + MONTHS[m] + '</div><div class="mgrid">' + cells + '</div></button>';
     }
     $('year-grid').innerHTML = html;
     $('legend-year').innerHTML = legendHtml();
@@ -245,7 +244,6 @@
   /* ---------- месяц ---------- */
   function renderMonth() {
     $('month-title').textContent = MONTHS[ui.month].charAt(0).toUpperCase() + MONTHS[ui.month].slice(1) + ' ' + ui.year;
-    $('seg-month').innerHTML = segHtml(VIEW_ITEMS, S.view);
     $('weekdays').innerHTML = WEEKDAYS.map(function (w) { return '<div>' + w + '</div>'; }).join('');
     var tk = todayKey();
     var cells = '';
@@ -362,7 +360,11 @@
     });
     html += '</div><div class="row-actions"><button class="btn soft" id="mood-add">+ Добавить</button><button class="btn soft" id="mood-reset">Стандартные</button></div></div>';
 
-    html += '<div class="card"><h2>Цвет дня</h2><p>Как складываются цвета утра и вечера.</p>';
+    html += '<div class="card"><h2>Как показывать день</h2><p>Вид ячеек на главной странице и в месяце.</p>';
+    html += '<div class="radio' + (S.view === 'blend' ? ' on' : '') + '" data-view="blend"><div class="rb"></div><div><b>Один цвет</b><small>Утро и вечер складываются в общий цвет дня</small></div></div>';
+    html += '<div class="radio' + (S.view === 'split' ? ' on' : '') + '" data-view="split"><div class="rb"></div><div><b>Две половинки</b><small>Левая половина — утро, правая — вечер</small></div></div></div>';
+
+    html += '<div class="card"><h2>Как складываются цвета</h2><p>Работает в режиме «Один цвет».</p>';
     html += '<div class="radio' + (S.blend === 'avg' ? ' on' : '') + '" data-blend="avg"><div class="rb"></div><div><b>Усреднение</b><small>Мягкий средний оттенок между утром и вечером</small></div></div>';
     html += '<div class="radio' + (S.blend === 'paint' ? ' on' : '') + '" data-blend="paint"><div class="rb"></div><div><b>Как краски</b><small>Синий + жёлтый дают зелёный, красный + жёлтый — оранжевый</small></div></div>';
     html += '<div id="mix-demo-wrap">' + mixDemoHtml() + '</div></div>';
@@ -491,10 +493,12 @@
     if (up('#month-prev')) { ui.month--; if (ui.month < 0) { ui.month = 11; ui.year--; } renderMonth(); return; }
     if (up('#month-next')) { ui.month++; if (ui.month > 11) { ui.month = 0; ui.year++; } renderMonth(); return; }
 
-    if ((el = up('#seg-year button')) || (el = up('#seg-month button'))) {
-      S.view = el.dataset.v; save(); rerender(); return;
+    if ((el = up('.ym'))) { ui.month = +el.dataset.m; show('month'); return; }
+    if ((el = up('.yc[data-d]'))) {
+      if (el.classList.contains('future')) return;
+      openSheet(el.dataset.d, suggestSlot()); return;
     }
-    if ((el = up('.mcard'))) { ui.month = +el.dataset.m; show('month'); return; }
+    if ((el = up('.radio[data-view]'))) { S.view = el.dataset.view; save(); renderSettings(); return; }
     if ((el = up('.cell[data-d]'))) {
       if (el.classList.contains('future')) return;
       openSheet(el.dataset.d, suggestSlot()); return;
