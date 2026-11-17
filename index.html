@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-title" content="Цвет дня">
+<meta name="theme-color" content="#F7F3EE">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
+<link rel="icon" href="icons/icon-192.png">
+<link rel="stylesheet" href="style.css?v=1.1">
+<title>Цвет дня · ver. 1.1</title>
+</head>
+<body>
+<div id="app">
+
+  <!-- Год -->
+  <section id="view-year" class="view">
+    <header class="top">
+      <button class="icon-btn" id="year-prev" aria-label="Предыдущий год">‹</button>
+      <h1 id="year-title">2026</h1>
+      <button class="icon-btn" id="year-next" aria-label="Следующий год">›</button>
+      <button class="icon-btn gear" id="open-settings" aria-label="Настройки">⚙︎</button>
+    </header>
+    <div class="seg" id="seg-year" role="tablist"></div>
+    <div id="year-grid" class="year-grid"></div>
+    <div id="legend-year" class="legend"></div>
+    <div id="nudge" class="nudge hidden"></div>
+  </section>
+
+  <!-- Месяц -->
+  <section id="view-month" class="view hidden">
+    <header class="top">
+      <button class="icon-btn wide" id="month-back">‹ Год</button>
+      <h1 id="month-title">Ноябрь</h1>
+      <span class="spacer"></span>
+    </header>
+    <div class="month-nav">
+      <button class="icon-btn" id="month-prev" aria-label="Предыдущий месяц">‹</button>
+      <div class="seg" id="seg-month" role="tablist"></div>
+      <button class="icon-btn" id="month-next" aria-label="Следующий месяц">›</button>
+    </div>
+    <div class="weekdays" id="weekdays"></div>
+    <div id="month-grid" class="month-grid"></div>
+    <div id="legend-month" class="legend"></div>
+    <div id="month-stats" class="stats"></div>
+  </section>
+
+  <!-- Настройки -->
+  <section id="view-settings" class="view hidden">
+    <header class="top">
+      <button class="icon-btn wide" id="settings-back">‹ Назад</button>
+      <h1>Настройки</h1>
+      <span class="spacer"></span>
+    </header>
+    <div id="settings-body"></div>
+  </section>
+
+  <button id="fab" class="fab">Отметить настроение</button>
+</div>
+
+<!-- Лист дня -->
+<div id="sheet-wrap" class="sheet-wrap hidden">
+  <div class="sheet-backdrop" id="sheet-backdrop"></div>
+  <div class="sheet" id="sheet">
+    <div class="grab"></div>
+    <div class="sheet-head">
+      <div id="sheet-preview" class="preview"></div>
+      <div>
+        <div id="sheet-date" class="sheet-date"></div>
+        <div id="sheet-sub" class="sheet-sub"></div>
+      </div>
+      <button class="icon-btn" id="sheet-close" aria-label="Закрыть">✕</button>
+    </div>
+    <div class="seg" id="seg-slot"></div>
+    <div id="sheet-body"></div>
+  </div>
+</div>
+
+<div id="toast" class="toast hidden"></div>
+
+<script src="app.js?v=1.1"></script>
+</body>
+</html>

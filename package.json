@@ -1,0 +1,9 @@
+{
+  "name": "cvet-dnya",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Reminders sender for the mood tracker",
+  "dependencies": {
+    "web-push": "^3.6.7"
+  }
+}
