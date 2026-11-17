@@ -1,0 +1,30 @@
+name: Reminders
+
+on:
+  workflow_dispatch:
+    inputs:
+      slot:
+        description: 'morning, evening or auto (by Moscow time)'
+        default: 'auto'
+
+permissions:
+  contents: read
+
+jobs:
+  send:
+    runs-on: ubuntu-latest
+    timeout-minutes: 50
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+      - run: npm ci --no-audit --no-fund
+      - name: Send reminder
+        env:
+          VAPID_PUBLIC_KEY: BHMn5qD9fro5z00KWfBW7xqLHterUXmLXmmIBOTNcQULDWhgfl7SC-mBvbxcBzrXOCrXjrLksR3SJ9WqCPUbqug
+          VAPID_PRIVATE_KEY: ${{ secrets.VAPID_PRIVATE_KEY }}
+          PUSH_SUBSCRIPTION: ${{ secrets.PUSH_SUBSCRIPTION }}
+          VAPID_SUBJECT: https://${{ github.repository_owner }}.github.io/${{ github.event.repository.name }}/
+          SLOT: ${{ github.event.inputs.slot }}
+        run: node scripts/send.js "${SLOT:-auto}"
